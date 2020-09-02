@@ -6,11 +6,11 @@ module SPI(
 	input reset,
 	input sample,
 
-    //SPI
+    	//SPI
 	input MISO,
 	output logic CS_b,
 	output logic sclk,
-    //SPI
+	//SPI
 
 	output logic [15:0] SPI_data);
 
@@ -21,11 +21,9 @@ module SPI(
 	
 
 	always_comb begin
-
-	
 		n_clk_divider = clk_divider + 1;
 		sclk = clk_divider[clock_delay];
-        CS_b = cycle_counter[4] && sclk;
+		CS_b = cycle_counter[4] && sclk;
 		
 		neg_sclk_tran = (~n_clk_divider[clock_delay] && clk_divider[clock_delay]); 
 	end
@@ -37,16 +35,16 @@ module SPI(
 			clk_divider <= {1'b1, {clock_delay{1'b0}}};
 		end else begin
 			if(sample) begin
-                cycle_counter <= 5'd15;
+				cycle_counter <= 5'd15;
 			end
 			
-            if(~CS_b) begin
-                clk_divider <= n_clk_divider;
-            end
+			if(~CS_b) begin
+				clk_divider <= n_clk_divider;
+			end
             
 			if(neg_sclk_tran) begin
-			    SPI_data[cycle_counter] <= MISO;
-			    cycle_counter <= cycle_counter - 1;
+				SPI_data[cycle_counter] <= MISO;
+				cycle_counter <= cycle_counter - 1;
 			end
 		end
 	end
