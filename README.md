@@ -5,6 +5,7 @@ Fake_proc.sv : A wrapper that outputs the apb signals to an arduino board (Must 
 ###################################
 Functions
 ###################################
+
 Disable RTL:
   PWRITE = 1
   PWDATA = 0
