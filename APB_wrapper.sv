@@ -11,9 +11,9 @@ module SPI_APB_wrapper(
     output logic PSLVERR, // Device error response
     
     //SPI
-	input MISO,
-	output logic CS_b,
-	output logic sclk,
+    input MISO,
+    output logic CS_b,
+    output logic sclk,
     //SPI
    
     input clk8,
@@ -46,14 +46,14 @@ module SPI_APB_wrapper(
     end
     
     always @(posedge clk8 or negedge PRESETn) begin
-        if(~PRESETn) begin
+        if(~PRESETn | ~timer_enabled) begin
             clock_divider <= 1'b0;   
             interrupt <= 1'b0;
         end else begin
             if(n_clock_divider >= 15'd250) begin //Cycles per half //489
                 clock_divider <= 1'b0;   
                 interrupt <= !interrupt;
-            end else if(timer_enabled) begin
+            end else begin
                 clock_divider <= n_clock_divider;
             end      
         end        
