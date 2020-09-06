@@ -7,17 +7,21 @@ Functions
 ###################################
 
 Disable RTL:
+
   PWRITE = 1
   PWDATA = 0
 
 Enable RTL:
+
   PWRITE = 1
   PWDATA = 1
   
 Read Last Value:
+
   PWRITE = 0
   PADDR[3:0] == 0
   
 Read Test Value:
+
   PWRITE = 0
   PADDR[3:0] != 0
