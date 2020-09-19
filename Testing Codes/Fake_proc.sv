@@ -15,7 +15,7 @@ module FakeProc(
     );
     
     logic PSEL, PENABLE;
-    logic [15:0] PRDATA;
+    logic [31:0] PRDATA;
     
     logic PREADY;
     
