@@ -15,7 +15,7 @@ module SPI_APB_wrapper(
     output logic CS_b,
     output logic sclk,
     //SPI
-   
+    
     input clk8,
     output logic interrupt
     );
@@ -26,19 +26,19 @@ module SPI_APB_wrapper(
     logic [15:0] PRDATA_temp;
     logic [14:0] clock_divider, n_clock_divider;
     
-    SPI spi0(PCLK, ~PRESETn, read_enable, MISO, CS_b, sclk, PRDATA_temp);
+    SPI spi0(PCLK, PRESETn, read_enable, MISO, CS_b, sclk, PRDATA_temp);
     
     assign PREADY = 1'b1; //Always ready
     assign PSLVERR = 1'b0; //Always okay
     
-    assign read_enable  = PSEL & PENABLE & ~PWRITE;
+    assign read_enable = PSEL & PENABLE & ~PWRITE;
     assign write_enable = PSEL & PENABLE & PWRITE;
     
     
     always_comb begin
-        n_clock_divider = clock_divider + 1;   
-        
-        if(PADDR[3:0] == 4'b0) begin
+    n_clock_divider = clock_divider + 1; 
+    
+    if(PADDR[3:0] == 4'b0) begin
             PRDATA = {16'b0, PRDATA_temp};
         end else begin
             PRDATA = 32'hDEADDEAD;
@@ -47,16 +47,16 @@ module SPI_APB_wrapper(
     
     always @(posedge clk8 or negedge PRESETn) begin
         if(~PRESETn | ~timer_enabled) begin
-            clock_divider <= 1'b0;   
+            clock_divider <= 1'b0; 
             interrupt <= 1'b0;
         end else begin
             if(n_clock_divider >= 15'd250) begin //Cycles per half //489
-                clock_divider <= 1'b0;   
+                clock_divider <= 1'b0; 
                 interrupt <= !interrupt;
             end else begin
                 clock_divider <= n_clock_divider;
-            end      
-        end        
+            end 
+        end 
     end
     
     always @(posedge PCLK or negedge PRESETn) begin
@@ -66,5 +66,5 @@ module SPI_APB_wrapper(
             timer_enabled <= PWDATA[0];
         end
     end
-    
+
 endmodule
